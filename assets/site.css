@@ -279,3 +279,22 @@ html,body{overflow-x:clip}
   .item .t{font-size:17px}
   .item .pmark.icon{width:32px;height:32px}.item .pmark.icon i{width:20px;height:20px}
 }
+
+/* lab rows: wide cards (home) */
+.wrap.wide{max-width:1040px}
+.year-group .list{display:flex;flex-direction:column;gap:14px}
+.item + .item::before{display:none}
+.item>a{grid-template-columns:104px 1fr auto;gap:26px;padding:20px 26px 20px 20px;margin:0;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.item>a:hover{background:var(--raise);border-color:rgba(var(--acc-rgb),.45);transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,0,0,.35)}
+.item .thumb{width:104px;height:104px;border-radius:18px}
+.item .t{font-size:24px;font-weight:600;letter-spacing:-.3px}
+.item .d{font-size:14.5px}
+.item .main{gap:8px}
+.item .pmark.icon{width:44px;height:44px;border-radius:12px}
+.item .pmark.icon i{width:28px;height:28px}
+@media (max-width:640px){
+  .item>a{grid-template-columns:72px 1fr auto;gap:16px;padding:14px 16px 14px 14px;border-radius:16px}
+  .item .thumb{width:72px;height:72px;border-radius:14px}
+  .item .t{font-size:18px}
+  .item .pmark.icon{width:34px;height:34px}.item .pmark.icon i{width:22px;height:22px}
+}

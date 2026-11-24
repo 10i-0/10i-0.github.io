@@ -100,7 +100,7 @@ const platforms = [...new Set(W.map((w) => w.platform))];
 const home = page({
   title: NAME, home: true, url: "/",
   description: "Writeups by zero@444: TryHackMe rooms, machines and challenges solved step by step.",
-  body: `<main class="wrap">
+  body: `<main class="wrap wide">
   <section class="intro hero">
     <div class="glow" aria-hidden="true"></div>
     <div class="prompt"><span class="pk">└─</span><span class="pu">$</span> <span class="typed" data-text="cat notes.txt"></span><span class="cur"></span></div>
