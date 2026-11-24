@@ -1,3 +1,9 @@
+/* fonts are served from this site (no Google requests) */
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/jetbrains-mono-400.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/jetbrains-mono-500.woff2) format("woff2")}
 :root,[data-theme="kali"]{
   --bg:#0a0e17; --surface:#101622; --raise:#151d2c; --line:#1c2638; --line2:#27334a;
   --text:#e4e9f2; --soft:#b3bdd0; --muted:#7c879c; --acc:#5aa9e6; --acc-rgb:90,169,230;

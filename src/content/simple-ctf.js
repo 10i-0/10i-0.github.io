@@ -18,37 +18,37 @@ export default {
   path: ["nmap -p- (FTP, HTTP, SSH on 2222)", "gobuster finds /simple", "CMS Made Simple 2.2.8", "CVE-2019-9053 SQLi dumps and cracks mitch's hash", "SSH as mitch on 2222", "sudo vim NOPASSWD", "root"],
   summary: "Simple CTF is an easy Linux box with an old CMS Made Simple site. I find the version, match it to an unauthenticated SQL injection, and use a public exploit to dump and crack the admin password. A note on anonymous FTP says the same weak password is used for the system user, so I log in over SSH on port 2222. <code>mitch</code> can run <code>vim</code> as root with sudo, which gives a root shell.",
   description: "TryHackMe Simple CTF walkthrough: full nmap scan finds SSH on 2222, CMS Made Simple 2.2.8 SQL injection (CVE-2019-9053) cracks mitch's password, and sudo vim gives root.",
-  banner: "/images/simple-ctf/room.png",
+  banner: "/images/simple-ctf/room.webp",
   sections: [
     { id: "q1", h: "Q1. How many services are running under port 1000?", body:
       step(1, "Scan the top 1000 ports",
         term({ ...K, cmds: ["nmap -sVC --top-ports 1000 -Pn -T4 simple.thm"] }) +
-        fig("/images/simple-ctf/nmap-top1000.png", "Two services under port 1000: FTP on 21 and HTTP on 80.") +
+        fig("/images/simple-ctf/nmap-top1000.webp", "Two services under port 1000: FTP on 21 and HTTP on 80.") +
         "<p><code>simple.thm</code> points to the target IP in my <code>/etc/hosts</code>. <code>-Pn</code> skips the ping check, and <code>-sVC</code> adds versions and default scripts.</p>")
     },
 
     { id: "q2", h: "Q2. What is running on the higher port?", body:
       step(1, "Scan all 65535 ports",
         term({ ...K, cmds: ["nmap -sVC -p- -Pn -T4 simple.thm"] }) +
-        fig("/images/simple-ctf/nmap-all-ports.png", "The full scan finds SSH on 2222, which the top-1000 scan missed.") +
+        fig("/images/simple-ctf/nmap-all-ports.webp", "The full scan finds SSH on 2222, which the top-1000 scan missed.") +
         "<p>The <code>ftp-anon</code> script also shows that anonymous FTP login is allowed. I use that in Q5.</p>")
     },
 
     { id: "q3", h: "Q3 + Q4. What's the CVE, and what kind of vulnerability is it?", body:
       step(1, "Brute-force web directories",
         term({ ...K, cmds: ["gobuster dir -u http://simple.thm -w /usr/share/wordlists/dirb/big.txt"] }) +
-        fig("/images/simple-ctf/gobuster.png", "/simple returns a 301 redirect to a new folder.") +
+        fig("/images/simple-ctf/gobuster.webp", "/simple returns a 301 redirect to a new folder.") +
         "<p>The web root is only the Apache default page, so I look for hidden paths.</p>") +
 
       step(2, "Open /simple and read the version",
         "<p>I open <code>http://simple.thm/simple/</code> in the browser. The site runs CMS Made Simple.</p>" +
-        fig("/images/simple-ctf/cms-home.png", "CMS Made Simple home page.") +
+        fig("/images/simple-ctf/cms-home.webp", "CMS Made Simple home page.") +
         "<p>The footer at the bottom of the page shows the exact version.</p>" +
-        fig("/images/simple-ctf/cms-version.png", "Footer: version 2.2.8.")) +
+        fig("/images/simple-ctf/cms-version.webp", "Footer: version 2.2.8.")) +
 
       step(3, "Search the version for CVEs",
         "<p>I search for <code>CMS Made Simple 2.2.8 cve</code>.</p>" +
-        fig("/images/simple-ctf/cve-search.png", "NVD lists CVE-2019-9053 for 2.2.8.") +
+        fig("/images/simple-ctf/cve-search.webp", "NVD lists CVE-2019-9053 for 2.2.8.") +
         "<p>CVE-2019-9053 is an unauthenticated, time-based blind SQL injection in the News module. That answers Q4 too: the bug class is <code>sqli</code>.</p>")
     },
 
@@ -65,30 +65,30 @@ what a mess!` }) +
 
       step(2, "Get a Python 3 version of the exploit",
         "<p>The original Exploit-DB script (46635) is Python 2. This fork works with Python 3 and has the same <code>-u</code>, <code>-w</code> and <code>--crack</code> options: <code>github.com/Perseus99999/CVE-2019-9053-working-</code></p>" +
-        fig("/images/simple-ctf/exploit-repo.png", "The Python 3 fork of the CVE-2019-9053 exploit.")) +
+        fig("/images/simple-ctf/exploit-repo.webp", "The Python 3 fork of the CVE-2019-9053 exploit.")) +
 
       step(3, "Run the exploit and crack the hash",
         term({ ...K, cmds: [
 `python3 exploit.py -u http://simple.thm/simple/ --crack \\
     -w /usr/share/wordlists/rockyou.txt`] }) +
-        fig("/images/simple-ctf/exploit-run.png", "Salt, user mitch, email and hash leak; rockyou cracks the hash (hidden).") +
+        fig("/images/simple-ctf/exploit-run.webp", "Salt, user mitch, email and hash leak; rockyou cracks the hash (hidden).") +
         "<p>It leaks the salt, the username <code>mitch</code>, the email and the password hash, then cracks the hash with rockyou. The password is <code>&bull;&bull;&bull;&bull;&bull;&bull;</code>.</p>" +
         why("The News module puts the <code>m1_idlist</code> parameter straight into a SQL query. The script injects conditions with a sleep, so a slow reply means \"true\", and it rebuilds each value one character at a time. CMSMS stores <code>md5(salt + password)</code>, so with the salt known the script hashes each rockyou word the same way and compares.")) +
 
       step(4, "Check the creds on the CMS admin panel",
         "<p>I log in at <code>http://simple.thm/simple/admin/login.php</code> as mitch. I do not need the admin panel for the solve, but it proves the creds are real.</p>" +
-        fig("/images/simple-ctf/cms-admin.png", "Logged in to the CMS admin panel as mitch."))
+        fig("/images/simple-ctf/cms-admin.webp", "Logged in to the CMS admin panel as mitch."))
     },
 
     { id: "q6", h: "Q6 + Q7. Where can you log in with the details, and what's the user flag?", body:
       step(1, "SSH as mitch on port 2222",
         term({ ...K, cmds: ["ssh mitch@simple.thm -p 2222"] }) +
-        fig("/images/simple-ctf/ssh-login.png", "SSH login as mitch. whoami: mitch.") +
+        fig("/images/simple-ctf/ssh-login.webp", "SSH login as mitch. whoami: mitch.") +
         "<p>SSH is not on the default port 22, so I set the port with <code>-p</code>. The CMS password works for the system user, as the FTP note said.</p>") +
 
       step(2, "Read user.txt",
         term({ ...M, cmds: ["ls -la", "cat user.txt"] }) +
-        fig("/images/simple-ctf/user-flag.png", "user.txt in mitch's home folder (flag hidden)."))
+        fig("/images/simple-ctf/user-flag.webp", "user.txt in mitch's home folder (flag hidden)."))
     },
 
     { id: "q8", h: "Q8. Is there any other user in the home directory?", body:

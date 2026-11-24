@@ -24,7 +24,7 @@ const PLATFORM = {
 const mark = (p, big) => { const m = PLATFORM[p] || { short: p.slice(0, 3), bg: "#151d2c", fg: "#b3bdd0" };
   const inner = m.icon ? `<i style="--pi:url(${m.icon})"></i>` : m.short;
   return `<span class="pmark${m.icon ? " icon" : ""}${big ? " big" : ""}" style="--pb:${m.bg};--pf:${m.fg}" title="${p}" aria-label="${p}">${inner}</span>`; };
-const thumbOf = (w) => w.thumb || `/images/${w.slug}/thumb.png`;
+const thumbOf = (w) => w.thumb || `/images/${w.slug}/thumb.webp`;
 
 // ---------- load writeups ----------
 const files = (await readdir("src/content")).filter((f) => f.endsWith(".js")).sort();
@@ -36,7 +36,7 @@ for (const w of W) for (const k of ["slug", "title", "platform", "diff", "date",
 
 // ---------- shared layout ----------
 function page({ title, description, url, image, crumb = "", body, home = false }) {
-  const full = title === NAME ? `${NAME} · writeups` : `${title} · ${NAME}`;
+  const full = title === NAME ? `${NAME} · writeups` : title;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -46,15 +46,17 @@ function page({ title, description, url, image, crumb = "", body, home = false }
 <meta name="description" content="${attr(description)}">
 <link rel="canonical" href="${SITE}${url}">
 <meta property="og:type" content="${home ? "website" : "article"}">
-<meta property="og:site_name" content="${NAME} writeups">
+<meta property="og:site_name" content="zero@444">
 <meta property="og:title" content="${attr(full)}">
 <meta property="og:description" content="${attr(description)}">
 <meta property="og:url" content="${SITE}${url}">
-${image ? `<meta property="og:image" content="${SITE}${image}">\n<meta name="twitter:card" content="summary_large_image">` : `<meta name="twitter:card" content="summary">`}
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${attr(full)}">
+<meta name="twitter:description" content="${attr(description)}">
+<meta name="theme-color" content="#0a0e17">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/motion.css">
 <script>document.documentElement.classList.add("js")</script>
@@ -114,7 +116,7 @@ const writeupPage = (w, i) => {
       </div>
     </div>` : "";
   return page({
-    title: `${w.title} (${w.platform})`, url: `/writeups/${w.slug}/`, image: thumbOf(w),
+    title: `${w.title} · ${w.platform} writeup`, url: `/writeups/${w.slug}/`, image: thumbOf(w),
     description: w.description || strip(w.summary),
     crumb: `<i>/</i><a href="/">writeups</a><i>/</i><b>${w.title}</b>`,
     body: `<main class="page">
