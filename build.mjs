@@ -3,7 +3,10 @@
 // Output: index.html, writeups/<slug>/index.html, 404.html, sitemap.xml, robots.txt
 import { readdir, mkdir, writeFile, rm } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+// version of each asset = short hash of its content (changes only when the file changes)
+const V = (f) => createHash("sha1").update(readFileSync(f)).digest("hex").slice(0, 8);
 
 const SITE = "https://10i-0.github.io";
 const NAME = "zero@444";
@@ -62,11 +65,11 @@ function page({ title, description, url, image, crumb = "", body, home = false }
 <meta name="twitter:title" content="${attr(full)}">
 <meta name="twitter:description" content="${attr(description)}">
 <meta name="theme-color" content="#0a0e17">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon.svg?v=${V("assets/favicon.svg")}" type="image/svg+xml">
 <link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jetbrains-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css">
-<link rel="stylesheet" href="/assets/motion.css">
+<link rel="stylesheet" href="/assets/site.css?v=${V("assets/site.css")}">
+<link rel="stylesheet" href="/assets/motion.css?v=${V("assets/motion.css")}">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -80,7 +83,7 @@ function page({ title, description, url, image, crumb = "", body, home = false }
 </div></header>
 ${body}
 <footer><div class="wrap"><span>${NAME} · writeups</span><a href="${GITHUB}" target="_blank" rel="noopener">GitHub</a></div></footer>
-<script src="/assets/site.js" defer></script>
+<script src="/assets/site.js?v=${V("assets/site.js")}" defer></script>
 </body>
 </html>
 `;
