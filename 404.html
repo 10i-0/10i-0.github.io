@@ -17,12 +17,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 <header><div class="in">
-  <a class="me" href="/">zero<span>@</span>444</a>
+  <a class="me" href="/" aria-label="zero@444 home"><i>┌──(</i><span>zero㉿444</span><i>)</i></a>
   
-  <nav class="links"><a href="/">Writeups</a><a href="https://github.com/10i-0" target="_blank" rel="noopener">GitHub</a></nav>
+  
+  <nav class="links"><div class="dd"><button type="button" class="ddb" aria-haspopup="true">CTF<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="menu" role="menu"><a href="/" role="menuitem"><span class="pmark icon all"><i></i></span>All writeups<span class="n">6</span></a><a href="/?p=TryHackMe" role="menuitem"><span class="pmark icon" style="--pb:#212c42;--pf:#ff4545" title="TryHackMe" aria-label="TryHackMe"><i style="--pi:url(/assets/platforms/tryhackme.svg)"></i></span>TryHackMe<span class="n">6</span></a></div></div><a href="https://github.com/10i-0" target="_blank" rel="noopener">GitHub</a></nav>
   <div class="progress"></div>
 </div></header>
 <main class="wrap"><section class="intro"><h1>Not found</h1><p>That page does not exist. <a class="inline" href="/">Back to the writeups</a>.</p></section></main>

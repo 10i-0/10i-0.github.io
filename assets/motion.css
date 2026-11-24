@@ -1,0 +1,124 @@
+/* zero@444 writeups: motion layer. Everything stays visible without JS
+   (reveal styles only apply under html.js) and calm under reduced motion. */
+
+/* smooth page-to-page fade (browsers that support cross-document view transitions) */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out .18s ease both; }
+::view-transition-new(root) { animation: vt-in .28s ease both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* thin themed scrollbar */
+html { scrollbar-width: thin; scrollbar-color: var(--line2) transparent; }
+::-webkit-scrollbar { width: 9px; height: 9px }
+::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 9px; border: 2px solid var(--bg) }
+::-webkit-scrollbar-thumb:hover { background: var(--muted) }
+
+/* header: gains depth after scrolling; reading bar glows */
+header { transition: box-shadow .3s, background .3s; }
+header.scrolled { box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+.progress { height: 2px; background: linear-gradient(90deg, var(--acc), var(--q)); box-shadow: 0 0 10px rgba(var(--acc-rgb),.6); transition: width .12s linear; }
+.me span { transition: text-shadow .3s }
+.me:hover span { text-shadow: 0 0 12px rgba(var(--acc-rgb),.7) }
+
+/* keyboard focus */
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 3px; border-radius: 6px }
+
+/* ---------- writeup page header: staggered entrance ---------- */
+html.js article > .back,
+html.js article > h1,
+html.js article > .meta,
+html.js article > .roombox,
+html.js article > .path,
+html.js article > .summary { opacity: 0; transform: translateY(12px); animation: up .7s cubic-bezier(.2,.7,.2,1) forwards; }
+html.js article > .back { animation-delay: .02s }
+html.js article > h1 { animation-delay: .08s }
+html.js article > .meta { animation-delay: .16s }
+html.js article > .roombox { animation-delay: .24s }
+html.js article > .path { animation-delay: .32s }
+html.js article > .summary { animation-delay: .42s }
+@keyframes up { to { opacity: 1; transform: none } }
+
+/* title: soft light sweep once on load */
+article > h1 { position: relative; background: linear-gradient(100deg, var(--text) 40%, #bfe1ff 50%, var(--text) 60%); background-size: 250% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; color: transparent; }
+html.js article > h1 { animation: up .7s .08s cubic-bezier(.2,.7,.2,1) forwards, sweep 1.6s .7s ease forwards; }
+@keyframes sweep { to { background-position: 0 0 } }
+
+/* room thumbnail floats a little, button gets a light sweep */
+.room-thumb { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s }
+.room-thumb:hover { transform: translateY(-3px) rotate(-1.5deg); box-shadow: 0 12px 30px rgba(var(--acc-rgb),.25) }
+.openroom { position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s, filter .2s }
+.openroom::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%); transform: translateX(-120%); }
+.openroom:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(var(--acc-rgb),.35) }
+.openroom:hover::after { transform: translateX(120%); transition: transform .7s ease }
+.openroom svg { transition: transform .2s }
+.openroom:hover svg { transform: translate(2px,-2px) }
+.toolsline code { transition: border-color .2s, color .2s }
+.toolsline code:hover { border-color: var(--acc); color: var(--text) }
+
+/* attack path: each hop lights up in turn */
+html.js .path li { opacity: 0; transform: translateX(-6px); animation: hop .45s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes hop { to { opacity: 1; transform: none } }
+
+/* ---------- reveal on scroll ---------- */
+html.js .rv { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+html.js .rv.in { opacity: 1; transform: none }
+
+/* question headings: an underline draws itself */
+article h2 { padding-bottom: 8px }
+article h2::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 56px; border-radius: 2px; background: linear-gradient(90deg, var(--q), transparent); transform-origin: left; }
+html.js article h2.rv::after { transform: scaleX(0); transition: transform .9s .25s cubic-bezier(.2,.7,.2,1) }
+html.js article h2.rv.in::after { transform: scaleX(1) }
+
+/* step number badge pops in */
+html.js .step.rv h3 .n { transform: scale(.4); transition: transform .5s .15s cubic-bezier(.3,1.6,.5,1) }
+html.js .step.rv.in h3 .n { transform: none }
+
+/* screenshots: blur to sharp; lift on hover */
+html.js figure.rv .shot { filter: blur(6px); transform: scale(.985); transition: filter .8s .1s ease, transform .8s .1s cubic-bezier(.2,.7,.2,1), border-color .2s, box-shadow .3s }
+html.js figure.rv.in .shot { filter: none; transform: none }
+.shot:hover { box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 0 1px rgba(var(--acc-rgb),.35) }
+
+/* terminal windows: soft glow when they arrive, cursor at the end of typed commands */
+.term { transition: box-shadow .4s, border-color .3s }
+.term:hover { border-color: rgba(var(--acc-rgb),.45); box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 0 1px rgba(var(--acc-rgb),.15) }
+.term .typing::after { content: ""; display: inline-block; width: 7px; height: 14px; margin-left: 2px; vertical-align: -2px; background: var(--acc); animation: blink 1s steps(1) infinite }
+.term .cp { transition: color .2s }
+.term .cp.done { color: var(--q) }
+.term .cp.done svg { animation: pop .35s cubic-bezier(.3,1.6,.5,1) }
+@keyframes pop { from { transform: scale(.5) } }
+
+/* why it works: a light runs down its edge */
+.why { position: relative; overflow: hidden; border-left: 3px solid rgba(var(--acc-rgb),.5) }
+.why::before { content: ""; position: absolute; left: -3px; top: -40%; width: 3px; height: 40%; background: linear-gradient(transparent, var(--q), transparent); }
+html.js .why.rv.in::before { animation: run 1.6s .3s ease-out }
+@keyframes run { to { top: 110% } }
+
+/* on this page: smooth highlight */
+.toc a { transition: color .25s, border-color .25s, padding-left .25s }
+.toc a.on { padding-left: 18px }
+
+/* lightbox: zooms in over a blurred page */
+.lightbox { display: flex; opacity: 0; visibility: hidden; backdrop-filter: blur(6px); transition: opacity .25s, visibility .25s }
+.lightbox.on { opacity: 1; visibility: visible }
+.lightbox img { transform: scale(.94); transition: transform .35s cubic-bezier(.2,.7,.2,1); box-shadow: 0 30px 80px rgba(0,0,0,.6) }
+.lightbox.on img { transform: none }
+
+/* inline code chips */
+:not(pre) > code { transition: border-color .2s, color .2s }
+p :not(pre) > code:hover, p code:hover { border-color: rgba(var(--acc-rgb),.5); color: var(--text) }
+
+/* CTF menu items slide a touch */
+.menu a { transition: background .15s, color .15s, transform .15s }
+.menu a:hover { transform: translateX(3px) }
+
+/* list: platform mark glows on hover */
+.item .pmark { transition: box-shadow .25s, transform .25s }
+.item > a:hover .pmark { box-shadow: 0 0 14px rgba(255,69,69,.35); transform: scale(1.06) }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important }
+  html.js .rv, html.js article > *, html.js .path li { opacity: 1 !important; transform: none !important; filter: none !important }
+  html.js figure.rv .shot { filter: none !important; transform: none !important }
+  article > h1 { color: var(--text); background: none }
+}
