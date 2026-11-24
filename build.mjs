@@ -3,6 +3,7 @@
 // Output: index.html, writeups/<slug>/index.html, 404.html, sitemap.xml, robots.txt
 import { readdir, mkdir, writeFile, rm } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { existsSync } from "node:fs";
 
 const SITE = "https://10i-0.github.io";
 const NAME = "zero@444";
@@ -20,17 +21,24 @@ const PLATFORM = {
   HackTheBox: { short: "HTB", bg: "#141d2b", fg: "#9fef00" },
   PortSwigger: { short: "PS", bg: "#1f1f1f", fg: "#ff6633" },
   PicoCTF: { short: "pico", bg: "#1b1b2f", fg: "#e0e0e0" },
+  "OffSec PG": { short: "PG", bg: "#1a1a2e", fg: "#e0e0e0" },
+  VulnHub: { short: "VH", bg: "#1b1f24", fg: "#e0e0e0" },
+  CTFtime: { short: "CTF", bg: "#1b1f24", fg: "#e0e0e0" },
+  // a new platform: add a line here; its logo goes in assets/platforms/<name>.svg (icon: "/assets/platforms/<name>.svg")
 };
 const mark = (p, big) => { const m = PLATFORM[p] || { short: p.slice(0, 3), bg: "#151d2c", fg: "#b3bdd0" };
   const inner = m.icon ? `<i style="--pi:url(${m.icon})"></i>` : m.short;
   return `<span class="pmark${m.icon ? " icon" : ""}${big ? " big" : ""}" style="--pb:${m.bg};--pf:${m.fg}" title="${p}" aria-label="${p}">${inner}</span>`; };
-const thumbOf = (w) => w.thumb || `/images/${w.slug}/thumb.webp`;
+// room thumbnail: images/<slug>/thumb.webp; if missing, the platform logo is used instead (and the build says so)
+const thumbOf = (w) => w.thumb || (existsSync(`images/${w.slug}/thumb.webp`) ? `/images/${w.slug}/thumb.webp`
+  : (PLATFORM[w.platform]?.icon || "/assets/favicon.svg"));
 
 // ---------- load writeups ----------
 const files = (await readdir("src/content")).filter((f) => f.endsWith(".js")).sort();
 const W = [];
 for (const f of files) W.push((await import(pathToFileURL(`src/content/${f}`).href + `?v=${Date.now()}`)).default);
 W.sort((a, b) => b.date.localeCompare(a.date));
+for (const w of W) { if (!w.thumb && !existsSync(`images/${w.slug}/thumb.webp`)) console.log(`note: ${w.slug} has no thumbnail yet`); if (!PLATFORM[w.platform]) console.log(`note: platform "${w.platform}" has no logo yet (text mark used)`); }
 for (const w of W) for (const k of ["slug", "title", "platform", "diff", "date", "tags", "path", "summary", "sections"])
   if (!w[k]) throw new Error(`${w.slug || "?"}: missing ${k}`);
 
