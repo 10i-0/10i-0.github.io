@@ -16,7 +16,7 @@ export default {
   tools: ["nmap", "ftp", "gobuster", "CVE-2019-9053 exploit", "ssh", "vim"],
   tags: ["ftp", "cms", "sqli", "cve", "password-cracking", "ssh", "sudo", "vim"],
   path: ["nmap -p- (FTP, HTTP, SSH on 2222)", "gobuster finds /simple", "CMS Made Simple 2.2.8", "CVE-2019-9053 SQLi dumps and cracks mitch's hash", "SSH as mitch on 2222", "sudo vim NOPASSWD", "root"],
-  summary: "Simple CTF is an easy Linux box with an old CMS Made Simple site. I find the version, match it to an unauthenticated SQL injection, and use a public exploit to dump and crack the admin password. A note on anonymous FTP says the same weak password is used for the system user, so I log in over SSH on port 2222. <code>mitch</code> can run <code>vim</code> as root with sudo, which gives a root shell.",
+  summary: "Simple CTF is a TryHackMe machine running an old CMS Made Simple site. I matched its version to a public SQL injection, dumped the admin password hash and cracked it. A note on anonymous FTP said the same weak password was used for the system user, so I logged in over SSH on port 2222. That user could run vim as root, which gave me a root shell.",
   description: "TryHackMe Simple CTF walkthrough: full nmap scan finds SSH on 2222, CMS Made Simple 2.2.8 SQL injection (CVE-2019-9053) cracks mitch's password, and sudo vim gives root.",
   banner: "/images/simple-ctf/room.webp",
   sections: [

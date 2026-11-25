@@ -18,7 +18,7 @@ export default {
   tools: ["nmap", "metasploit", "smbclient", "ftp", "netcat", "GTFOBins"],
   tags: ["ftp", "anonymous-login", "smb", "cron", "writable-script", "reverse-shell", "suid", "env"],
   path: ["nmap (FTP, SSH, SMB)", "anonymous FTP", "world-writable clean.sh run by cron", "bash reverse shell as namelessone", "SUID /usr/bin/env", "root"],
-  summary: "Anonymous is a Linux box where the name is the hint: the FTP server allows anonymous login. In a scripts folder, a cleanup script runs on a timer and anyone can write to it, so I put a reverse shell inside it and wait. That gives a shell as <code>namelessone</code>. For root, <code>/usr/bin/env</code> has the SUID bit, and <code>env /bin/sh -p</code> keeps the root rights.",
+  summary: "Anonymous is a TryHackMe machine with an FTP server open to anyone. Inside it I found a cleanup script that ran on a timer and that anyone could edit, so I replaced it with a reverse shell and got in as namelessone. For root, I found env with the SUID bit set and used it to start a root shell.",
   description: "TryHackMe Anonymous walkthrough: anonymous FTP, a world-writable cron script turned into a bash reverse shell, SMB share enumeration, and SUID env to root.",
   banner: "/images/anonymous/room.webp",
   sections: [

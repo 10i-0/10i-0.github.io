@@ -18,7 +18,7 @@
 <link rel="icon" href="/assets/favicon.svg?v=a6c11342" type="image/svg+xml">
 <link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jetbrains-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css?v=15c1de01">
+<link rel="stylesheet" href="/assets/site.css?v=17cac724">
 <link rel="stylesheet" href="/assets/motion.css?v=1f18d945">
 <script>document.documentElement.classList.add("js")</script>
 </head>
@@ -35,16 +35,15 @@
   <article>
     <a class="back" href="/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>All writeups</a>
     <h1>Pickle Rick</h1>
-    <div class="meta"><span class="pm"><span class="pmark icon big" style="--pb:#212c42;--pf:#ff4545" title="TryHackMe" aria-label="TryHackMe"><i style="--pi:url(/assets/platforms/tryhackme.svg)"></i></span><b>TryHackMe</b></span><span><span class="dot easy"></span>Easy</span><span>Linux · Web</span><span><time datetime="2026-11-23">23 Nov 2026</time></span></div>
+    <div class="meta"><span><b>TryHackMe</b></span><span><span class="dot easy"></span>Easy</span><span>Linux · Web</span><span><time datetime="2026-11-23">23 Nov 2026</time></span></div>
     <div class="roombox">
-      <img class="room-thumb" src="/images/pickle-rick/thumb.webp" alt="Pickle Rick">
+      <img class="room-cover" src="/images/pickle-rick/cover.webp" alt="Pickle Rick on TryHackMe">
       <div class="roominfo">
         <a class="openroom" href="https://tryhackme.com/room/picklerick" target="_blank" rel="noopener">Open room on TryHackMe<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         <div class="toolsline"><span>Tools</span><code>nmap</code> <code>gobuster</code> <code>curl</code> <code>DevTools</code> <code>revshells.com</code> <code>netcat</code></div>
       </div>
     </div>
-    <div class="path"><div class="lbl">ATTACK PATH</div><ol><li>HTML comment (user)</li><li>robots.txt (password)</li><li>command panel</li><li>Python reverse shell</li><li>sudo NOPASSWD ALL</li><li>root</li></ol></div>
-    <p class="summary">Pickle Rick is a small Linux web box. The site leaks a username in an HTML comment and a password in <code>robots.txt</code>. After login, a command panel runs shell commands as <code>www-data</code> but blocks <code>cat</code>, so I turn it into a reverse shell. For the last ingredient, <code>www-data</code> can run any command as root with no password.</p>
+    <p class="summary">Pickle Rick is a TryHackMe web machine. I found a username in the page source and a password in robots.txt, which opened a command panel on the site. The panel blocked some commands, so I sent a Python reverse shell through it and got a shell as www-data. The web user could run anything as root with sudo, which gave me the last ingredient.</p>
     <h2 id="q1"><a class="anchor" href="#q1" aria-label="Link to this section">#</a>Q1. What is the first ingredient?</h2><div class="step"><h3><span class="n">1</span>Scan all ports</h3><div class="term kali"><div class="tbar"><i></i><i></i><i></i><span class="tt">zsh — zero@444</span><button class="cp" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button></div><pre><span class="pk">┌──(</span><span class="pu">zero㉿444</span><span class="pk">)-[</span><span class="pd">~/THM/pickle-rick</span><span class="pk">]</span>
 <span class="pk">└─</span><span class="pu">$</span> <span class="cmdtext">nmap -sVC -p- -Pn -T4 rick.thm</span>
 <span class="o">PORT   STATE SERVICE VERSION

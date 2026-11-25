@@ -298,3 +298,21 @@ html,body{overflow-x:clip}
   .item .t{font-size:18px}
   .item .pmark.icon{width:34px;height:34px}.item .pmark.icon i{width:22px;height:22px}
 }
+
+/* story cards (home): text on the left, cover on the right */
+.item>a{grid-template-columns:1fr 280px;gap:32px;padding:24px 24px 24px 28px;align-items:center}
+.item .main{gap:6px}
+.item .t{font-size:24px}
+.item .d{font-size:13.5px}
+.item .story{display:block;margin-top:8px;color:var(--soft);font-size:15.5px;line-height:1.7}
+.item .cover{width:280px;height:158px;border-radius:16px;object-fit:cover;transition:transform .3s,box-shadow .3s}
+.item>a:hover .cover{transform:scale(1.03);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.room-cover{width:300px;max-width:100%;border-radius:18px;transition:transform .35s,box-shadow .35s}
+.room-cover:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(var(--acc-rgb),.2)}
+@media (max-width:820px){
+  .item>a{grid-template-columns:1fr;gap:16px;padding:18px}
+  .item .cover{order:-1;width:100%;height:auto;aspect-ratio:16/9}
+  .item .t{font-size:20px}
+  .roombox{flex-wrap:wrap}
+}
+@media (max-width:820px){.item .d{order:0}}

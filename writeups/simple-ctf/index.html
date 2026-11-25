@@ -18,7 +18,7 @@
 <link rel="icon" href="/assets/favicon.svg?v=a6c11342" type="image/svg+xml">
 <link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jetbrains-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css?v=15c1de01">
+<link rel="stylesheet" href="/assets/site.css?v=17cac724">
 <link rel="stylesheet" href="/assets/motion.css?v=1f18d945">
 <script>document.documentElement.classList.add("js")</script>
 </head>
@@ -35,16 +35,15 @@
   <article>
     <a class="back" href="/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>All writeups</a>
     <h1>Simple CTF</h1>
-    <div class="meta"><span class="pm"><span class="pmark icon big" style="--pb:#212c42;--pf:#ff4545" title="TryHackMe" aria-label="TryHackMe"><i style="--pi:url(/assets/platforms/tryhackme.svg)"></i></span><b>TryHackMe</b></span><span><span class="dot easy"></span>Easy</span><span>Linux</span><span><time datetime="2026-11-24">24 Nov 2026</time></span></div>
+    <div class="meta"><span><b>TryHackMe</b></span><span><span class="dot easy"></span>Easy</span><span>Linux</span><span><time datetime="2026-11-24">24 Nov 2026</time></span></div>
     <div class="roombox">
-      <img class="room-thumb" src="/images/simple-ctf/thumb.webp" alt="Simple CTF">
+      <img class="room-cover" src="/images/simple-ctf/cover.webp" alt="Simple CTF on TryHackMe">
       <div class="roominfo">
         <a class="openroom" href="https://tryhackme.com/room/easyctf" target="_blank" rel="noopener">Open room on TryHackMe<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         <div class="toolsline"><span>Tools</span><code>nmap</code> <code>ftp</code> <code>gobuster</code> <code>CVE-2019-9053 exploit</code> <code>ssh</code> <code>vim</code></div>
       </div>
     </div>
-    <div class="path"><div class="lbl">ATTACK PATH</div><ol><li>nmap -p- (FTP, HTTP, SSH on 2222)</li><li>gobuster finds /simple</li><li>CMS Made Simple 2.2.8</li><li>CVE-2019-9053 SQLi dumps and cracks mitch's hash</li><li>SSH as mitch on 2222</li><li>sudo vim NOPASSWD</li><li>root</li></ol></div>
-    <p class="summary">Simple CTF is an easy Linux box with an old CMS Made Simple site. I find the version, match it to an unauthenticated SQL injection, and use a public exploit to dump and crack the admin password. A note on anonymous FTP says the same weak password is used for the system user, so I log in over SSH on port 2222. <code>mitch</code> can run <code>vim</code> as root with sudo, which gives a root shell.</p>
+    <p class="summary">Simple CTF is a TryHackMe machine running an old CMS Made Simple site. I matched its version to a public SQL injection, dumped the admin password hash and cracked it. A note on anonymous FTP said the same weak password was used for the system user, so I logged in over SSH on port 2222. That user could run vim as root, which gave me a root shell.</p>
     <h2 id="q1"><a class="anchor" href="#q1" aria-label="Link to this section">#</a>Q1. How many services are running under port 1000?</h2><div class="step"><h3><span class="n">1</span>Scan the top 1000 ports</h3><div class="term kali"><div class="tbar"><i></i><i></i><i></i><span class="tt">zsh — zero@444</span><button class="cp" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button></div><pre><span class="pk">┌──(</span><span class="pu">zero㉿444</span><span class="pk">)-[</span><span class="pd">~/THM/simple-ctf</span><span class="pk">]</span>
 <span class="pk">└─</span><span class="pu">$</span> <span class="cmdtext">nmap -sVC --top-ports 1000 -Pn -T4 simple.thm</span></pre></div><figure><button class="shot" type="button" data-zoom aria-label="Enlarge screenshot"><img src="/images/simple-ctf/nmap-top1000.webp" alt="Two services under port 1000: FTP on 21 and HTTP on 80." loading="lazy"></button><figcaption>Two services under port 1000: FTP on 21 and HTTP on 80.</figcaption></figure><p><code>simple.thm</code> points to the target IP in my <code>/etc/hosts</code>. <code>-Pn</code> skips the ping check, and <code>-sVC</code> adds versions and default scripts.</p></div>
 <h2 id="q2"><a class="anchor" href="#q2" aria-label="Link to this section">#</a>Q2. What is running on the higher port?</h2><div class="step"><h3><span class="n">1</span>Scan all 65535 ports</h3><div class="term kali"><div class="tbar"><i></i><i></i><i></i><span class="tt">zsh — zero@444</span><button class="cp" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button></div><pre><span class="pk">┌──(</span><span class="pu">zero㉿444</span><span class="pk">)-[</span><span class="pd">~/THM/simple-ctf</span><span class="pk">]</span>

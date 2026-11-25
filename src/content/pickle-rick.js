@@ -15,7 +15,7 @@ export default {
   tools: ["nmap", "gobuster", "curl", "DevTools", "revshells.com", "netcat"],
   tags: ["web", "source-code", "command-injection", "reverse-shell", "sudo"],
   path: ["HTML comment (user)", "robots.txt (password)", "command panel", "Python reverse shell", "sudo NOPASSWD ALL", "root"],
-  summary: "Pickle Rick is a small Linux web box. The site leaks a username in an HTML comment and a password in <code>robots.txt</code>. After login, a command panel runs shell commands as <code>www-data</code> but blocks <code>cat</code>, so I turn it into a reverse shell. For the last ingredient, <code>www-data</code> can run any command as root with no password.",
+  summary: "Pickle Rick is a TryHackMe web machine. I found a username in the page source and a password in robots.txt, which opened a command panel on the site. The panel blocked some commands, so I sent a Python reverse shell through it and got a shell as www-data. The web user could run anything as root with sudo, which gave me the last ingredient.",
   description: "TryHackMe Pickle Rick walkthrough: HTML comment and robots.txt credentials, a filtered web command panel turned into a Python reverse shell, and sudo NOPASSWD to root.",
   banner: "/images/pickle-rick/room.webp",
   sections: [

@@ -19,7 +19,7 @@ export default {
   tools: ["nmap", "Google", "Hashes.com", "metasploit", "netcat", "ssh", "nano"],
   tags: ["osint", "password-leak", "md5", "pop3", "email", "ssh", "motd", "reverse-shell"],
   path: ["nmap (SSH, HTTP, POP3, IMAP)", "breach notice + hijacked X handle", "leaked MD5 dump on GitHub", "crack hashes", "POP3 as seina", "temp SSH password in email", "SSH as baksteen", "group-writable MOTD script", "root"],
-  summary: "Fowsniff Corp got breached and the attacker dumped staff email passwords online. I follow the breach notice to a public MD5 dump, crack it, log in to the POP3 mail server as seina, and read an email with a temporary SSH password. The user who never changed it lets me in. For root, a login-banner script runs as root on every SSH login, and my user's group can edit it.",
+  summary: "Fowsniff is a TryHackMe machine about a company that was breached. I followed the leak to a public dump of password hashes, cracked them and used one to read a staff mailbox over POP3. An email there held a temporary SSH password for a user who never changed it. For root, I edited a login banner script that runs as root on every SSH login.",
   description: "TryHackMe Fowsniff CTF walkthrough: OSINT to a leaked MD5 password dump, POP3 brute force with Metasploit, reading mail with netcat, SSH as baksteen, and a group-writable MOTD script for root.",
   sections: [
     { id: "q1", h: "Q1. What ports are open?", body:

@@ -16,7 +16,7 @@ export default {
   tools: ["nmap", "gobuster", "DevTools", "Hashes.com", "CyberChef", "john", "steghide", "Cryptii", "ssh", "netcat"],
   tags: ["web", "enumeration", "encoding", "hash-cracking", "steganography", "ssh", "cron", "reverse-shell"],
   path: ["nmap (80, 6498, 65524)", "gobuster + page source: 3 flags", "hidden directory", "john cracks a GOST hash", "steghide gives SSH creds", "SSH as boring on 6498", "writable root cron script", "root"],
-  summary: "Easy Peasy is a Linux room full of small clues. I enumerate two web servers, read hidden page source, decode Base64 and Base62, crack a GOST hash with the room's wordlist, and use it as the Steghide passphrase to pull SSH credentials out of an image. For root, a cron script in <code>/var/www</code> runs as root but is owned by my user, so I turn it into a reverse shell.",
+  summary: "Easy Peasy is a TryHackMe machine full of small clues spread across two web servers. I followed hidden page source, decoded text and cracked a hash, which unlocked SSH credentials hidden inside an image. Once in, I found a cron script that ran as root but was writable by my user, and turned it into a root reverse shell.",
   description: "TryHackMe Easy Peasy walkthrough: web enumeration on two servers, Base64/Base62 clues, GOST hash cracking with john, steghide credentials, SSH on port 6498, and a writable root cron script.",
   banner: "/images/easypeasy/room.webp",
   sections: [

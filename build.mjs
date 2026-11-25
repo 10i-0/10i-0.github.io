@@ -33,6 +33,8 @@ const mark = (p, big) => { const m = PLATFORM[p] || { short: p.slice(0, 3), bg: 
   const inner = m.icon ? `<i style="--pi:url(${m.icon})"></i>` : m.short;
   return `<span class="pmark${m.icon ? " icon" : ""}${big ? " big" : ""}" style="--pb:${m.bg};--pf:${m.fg}" title="${p}" aria-label="${p}">${inner}</span>`; };
 // room thumbnail: images/<slug>/thumb.webp; if missing, the platform logo is used instead (and the build says so)
+// cover: images/<slug>/cover.webp (platform logo + room image, made by tools/make_cover.py); falls back to the thumbnail
+const coverOf = (w) => existsSync(`images/${w.slug}/cover.webp`) ? `/images/${w.slug}/cover.webp` : thumbOf(w);
 const thumbOf = (w) => w.thumb || (existsSync(`images/${w.slug}/thumb.webp`) ? `/images/${w.slug}/thumb.webp`
   : (PLATFORM[w.platform]?.icon || "/assets/favicon.svg"));
 
@@ -90,7 +92,7 @@ ${body}
 }
 
 const item = (w) => `<li class="item" data-platform="${attr(w.platform)}" data-search="${attr([w.title, w.platform, w.os, w.path.join(" "), w.tags.join(" "), (w.tools || []).join(" ")].join(" ").toLowerCase())}">
-  <a href="/writeups/${w.slug}/"><img class="thumb" src="${thumbOf(w)}" alt="" loading="lazy"><span class="main"><span class="t">${w.title}</span><span class="d">${md(w.date)}</span></span>${mark(w.platform)}</a>
+  <a href="/writeups/${w.slug}/"><span class="main"><span class="t">${w.title}</span><span class="d">${md(w.date)} · ${w.platform}</span><span class="story">${strip(w.summary)}</span></span><img class="cover" src="${coverOf(w)}" alt="" loading="lazy"></a>
 </li>`;
 
 const groups = (list) => {
@@ -120,7 +122,7 @@ const home = page({
 const writeupPage = (w, i) => {
   const sections = w.sections.map((s) => `<h2 id="${s.id}"><a class="anchor" href="#${s.id}" aria-label="Link to this section">#</a>${s.h}</h2>${s.body}`).join("\n");
   const room = true ? `<div class="roombox">
-      <img class="room-thumb" src="${thumbOf(w)}" alt="${attr(w.title)}">
+      <img class="room-cover" src="${coverOf(w)}" alt="${attr(w.title)} on ${attr(w.platform)}">
       <div class="roominfo">
         ${w.room ? `<a class="openroom" href="${w.room}" target="_blank" rel="noopener">Open room on ${w.platform}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>` : ""}
         ${w.tools ? `<div class="toolsline"><span>Tools</span>${w.tools.map((t) => `<code>${t}</code>`).join(" ")}</div>` : ""}
@@ -134,9 +136,8 @@ const writeupPage = (w, i) => {
   <article>
     <a class="back" href="/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>All writeups</a>
     <h1>${w.title}</h1>
-    <div class="meta"><span class="pm">${mark(w.platform, true)}<b>${w.platform}</b></span><span><span class="dot ${w.diff}"></span>${cap(w.diff)}</span>${w.os ? `<span>${w.os}</span>` : ""}<span><time datetime="${w.date}">${longDate(w.date)}</time></span></div>
+    <div class="meta"><span><b>${w.platform}</b></span><span><span class="dot ${w.diff}"></span>${cap(w.diff)}</span>${w.os ? `<span>${w.os}</span>` : ""}<span><time datetime="${w.date}">${longDate(w.date)}</time></span></div>
     ${room}
-    <div class="path"><div class="lbl">ATTACK PATH</div><ol>${w.path.map((p) => `<li>${p}</li>`).join("")}</ol></div>
     <p class="summary">${w.summary}</p>
     ${sections}
   </article>
