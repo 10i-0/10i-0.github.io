@@ -120,7 +120,11 @@ const home = page({
 
 // ---------- writeup pages ----------
 const writeupPage = (w, i) => {
-  const sections = w.sections.map((s) => `<h2 id="${s.id}"><a class="anchor" href="#${s.id}" aria-label="Link to this section">#</a>${s.h}</h2>${s.body}`).join("\n");
+  const linkIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
+  // every step gets its own id (section-stepnumber) and a "copy link" button
+  const withIds = (s) => s.body.replace(/<div class="step"><h3><span class="n">(\d+)<\/span>([\s\S]*?)<\/h3>/g,
+    (m, n, h) => `<div class="step" id="${s.id}-${n}"><h3><span class="n">${n}</span>${h}<a class="slink" href="#${s.id}-${n}" aria-label="Copy a link to this step" title="Copy link to this step">${linkIcon}</a></h3>`);
+  const sections = w.sections.map((s) => `<h2 id="${s.id}"><a class="anchor" href="#${s.id}" aria-label="Link to this section">#</a>${s.h}</h2>${withIds(s)}`).join("\n");
   const room = true ? `<div class="roombox">
       <img class="room-cover" src="${coverOf(w)}" alt="${attr(w.title)} on ${attr(w.platform)}">
       <div class="roominfo">

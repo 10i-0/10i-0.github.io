@@ -111,4 +111,59 @@
 
   // lightbox empties after it has faded out
   box.addEventListener("transitionend", () => { if (!box.classList.contains("on")) box.innerHTML = ""; });
+  // ---------- step navigation ----------
+  // 6) jump smoothly to a section or step and flash it
+  const flash = (el) => { if (!el) return; el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); };
+  const go = (id, push) => {
+    const el = document.getElementById(id); if (!el) return;
+    if (push) history.replaceState(null, "", "#" + id);
+    // images above load while scrolling and move the target, so watch it until it stops, then fix the last bit
+    const token = (go.t = (go.t || 0) + 1);
+    const want = () => el.tagName === "H2" ? 84 : 90;
+    el.scrollIntoView({ behavior: still ? "instant" : "smooth", block: "start" });
+    let last = null, stable = 0, fixes = 0;
+    const watch = () => {
+      if (token !== go.t) return;                               // a newer jump started
+      const top = el.getBoundingClientRect().top;
+      stable = last !== null && Math.abs(top - last) < 1 ? stable + 1 : 0; last = top;
+      if (stable < 2) return setTimeout(watch, 100);
+      const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+      if (Math.abs(top - want()) > 24 && !(atEnd && top > want()) && fixes++ < 4) { scrollBy({ top: top - want(), behavior: "instant" }); stable = 0; last = null; return setTimeout(watch, 120); }
+      flash(el);
+    };
+    setTimeout(watch, 120);
+  };
+  $$('.toc a[href^="#"], h2 .anchor').forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); go(a.getAttribute("href").slice(1), true); }));
+  if (location.hash) { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; setTimeout(() => go(decodeURIComponent(location.hash.slice(1)), false), 350); }
+  addEventListener("hashchange", () => location.hash && go(decodeURIComponent(location.hash.slice(1)), false));
+
+  // 4) copy a link to one step
+  const toast = document.createElement("div"); toast.className = "toast"; document.body.appendChild(toast);
+  let tt;
+  $$(".slink").forEach((a) => a.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const id = a.getAttribute("href").slice(1), url = location.origin + location.pathname + "#" + id;
+    let ok = false;
+    try { await navigator.clipboard.writeText(url); ok = true; } catch (_) {
+      const ta = document.createElement("textarea"); ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); try { ok = document.execCommand("copy"); } catch (_) {} ta.remove();
+    }
+    toast.textContent = ok ? "Link to this step copied" : url;
+    history.replaceState(null, "", "#" + id); flash(document.getElementById(id));
+    toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove("on"), 1800);
+  }));
+
+  // 2) the step in the middle of the screen lights up
+  const steps = $$("article .step");
+  if (steps.length) {
+    let cur = null;
+    const pick = () => {
+      const mid = innerHeight * 0.45; let best = null, bd = 1e9;
+      steps.forEach((s) => { const r = s.getBoundingClientRect(); if (r.bottom < 80 || r.top > innerHeight) return;
+        const d = r.top <= mid && r.bottom >= mid ? 0 : Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid)); if (d < bd) { bd = d; best = s; } });
+      if (best !== cur) { cur && cur.classList.remove("now"); best && best.classList.add("now"); cur = best; }
+      document.body.classList.toggle("reading", !!best && scrollY > 300);
+    };
+    addEventListener("scroll", pick, { passive: true }); pick();
+  }
 })();

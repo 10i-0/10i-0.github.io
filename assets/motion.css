@@ -122,3 +122,24 @@ p :not(pre) > code:hover, p code:hover { border-color: rgba(var(--acc-rgb),.5); 
   html.js figure.rv .shot { filter: none !important; transform: none !important }
   article > h1 { color: var(--text); background: none }
 }
+
+/* ---------- step navigation ---------- */
+/* 6) flash when you jump to a section or step */
+@keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(var(--acc-rgb),.0); background: rgba(var(--acc-rgb),.16) } 100% { box-shadow: 0 0 0 14px rgba(var(--acc-rgb),0); background: transparent } }
+.step.flash, h2.flash { animation: flash 1.4s ease-out; border-radius: 12px }
+.step { scroll-margin-top: 90px; padding: 6px 10px; margin-left: -10px; margin-right: -10px; border-radius: 12px; transition: opacity .35s ease }
+
+/* 2) current step lights up, the others rest a little */
+body.reading article .step:not(.now) { opacity: .55 }
+body.reading article .step:not(.now):hover { opacity: 1 }
+.step.now h3 .n { background: var(--acc); color: var(--bg); box-shadow: 0 0 0 4px rgba(var(--acc-rgb),.18), 0 0 18px rgba(var(--acc-rgb),.45); transition: background .3s, color .3s, box-shadow .3s }
+
+/* 4) copy-link button on each step */
+.step h3 { position: relative }
+.slink { margin-left: 8px; color: var(--muted); opacity: 0; transform: translateX(-4px); transition: opacity .2s, transform .2s, color .2s; display: inline-flex; align-self: center }
+.step:hover .slink, .slink:focus-visible { opacity: 1; transform: none }
+.slink:hover { color: var(--acc) }
+@media (hover: none) { .slink { opacity: .6; transform: none } }
+.toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); background: var(--raise); color: var(--text); border: 1px solid rgba(var(--acc-rgb),.45); padding: 10px 16px; border-radius: 12px; font-size: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.45); opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 70 }
+.toast.on { opacity: 1; transform: translate(-50%, 0) }
+@media (prefers-reduced-motion: reduce) { body.reading article .step:not(.now) { opacity: 1 } }
