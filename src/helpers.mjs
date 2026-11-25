@@ -30,13 +30,13 @@ const copyIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" st
 // who: "kali" = my machine (zsh), "shell" = shell on the target, "panel" = a web form that runs commands
 const PROMPT = {
   kali: (cwd, user, host, root) => root
-    ? `<span class="pk">┌──(</span><span class="pr">root㉿444</span><span class="pk">)-[</span><span class="pd">${cwd || "~"}</span><span class="pk">]</span>\n<span class="pk">└─</span><span class="pr">#</span> `
-    : `<span class="pk">┌──(</span><span class="pu">zero㉿444</span><span class="pk">)-[</span><span class="pd">${cwd || "~"}</span><span class="pk">]</span>\n<span class="pk">└─</span><span class="pu">$</span> `,
+    ? `<span class="pk">┌──(</span><span class="pr">root㉿404</span><span class="pk">)-[</span><span class="pd">${cwd || "~"}</span><span class="pk">]</span>\n<span class="pk">└─</span><span class="pr">#</span> `
+    : `<span class="pk">┌──(</span><span class="pu">zero㉿404</span><span class="pk">)-[</span><span class="pd">${cwd || "~"}</span><span class="pk">]</span>\n<span class="pk">└─</span><span class="pu">$</span> `,
   shell: (cwd, user, host) => `<span class="ps">${user || "www-data"}@${host || "target"}</span>:<span class="pd">${cwd || "/"}</span>$ `,
   panel: () => `<span class="pk">&gt;</span> `,
 };
 const TITLE = {
-  kali: (o) => o.root ? "zsh — root@444" : "zsh — zero@444",
+  kali: (o) => o.root ? "zsh — root@404" : "zsh — zero@404",
   shell: (o) => `shell — ${o.user || "www-data"}@${o.host || "target"}`,
   panel: () => "web · command panel",
 };

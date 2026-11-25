@@ -9,7 +9,7 @@ import { createHash } from "node:crypto";
 const V = (f) => createHash("sha1").update(readFileSync(f)).digest("hex").slice(0, 8);
 
 const SITE = "https://10i-0.github.io";
-const NAME = "zero@444";
+const NAME = "zero@404";
 const GITHUB = "https://github.com/10i-0";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
@@ -33,7 +33,7 @@ const mark = (p, big) => { const m = PLATFORM[p] || { short: p.slice(0, 3), bg: 
   const inner = m.icon ? `<i style="--pi:url(${m.icon})"></i>` : m.short;
   return `<span class="pmark${m.icon ? " icon" : ""}${big ? " big" : ""}" style="--pb:${m.bg};--pf:${m.fg}" title="${p}" aria-label="${p}">${inner}</span>`; };
 // room thumbnail: images/<slug>/thumb.webp; if missing, the platform logo is used instead (and the build says so)
-// cover: images/<slug>/cover.webp (platform logo + room image, made by tools/make_cover.py); falls back to the thumbnail
+// cover: images/<slug>/cover.webp (platform logo + room image, made by _site-tools/make_cover.py); falls back to the thumbnail
 const coverOf = (w) => existsSync(`images/${w.slug}/cover.webp`) ? `/images/${w.slug}/cover.webp` : thumbOf(w);
 const thumbOf = (w) => w.thumb || (existsSync(`images/${w.slug}/thumb.webp`) ? `/images/${w.slug}/thumb.webp`
   : (PLATFORM[w.platform]?.icon || "/assets/favicon.svg"));
@@ -59,7 +59,7 @@ function page({ title, description, url, image, crumb = "", body, home = false }
 <meta name="description" content="${attr(description)}">
 <link rel="canonical" href="${SITE}${url}">
 <meta property="og:type" content="${home ? "website" : "article"}">
-<meta property="og:site_name" content="zero@444">
+<meta property="og:site_name" content="zero@404">
 <meta property="og:title" content="${attr(full)}">
 <meta property="og:description" content="${attr(description)}">
 <meta property="og:url" content="${SITE}${url}">
@@ -76,7 +76,7 @@ function page({ title, description, url, image, crumb = "", body, home = false }
 </head>
 <body>
 <header><div class="in">
-  <a class="me" href="/" aria-label="zero@444 home"><i>┌──(</i><span>zero㉿444</span><i>)</i></a>
+  <a class="me" href="/" aria-label="zero@404 home"><i>┌──(</i><span>zero㉿404</span><i>)</i></a>
   ${crumb ? `<div class="crumb">${crumb}</div>` : ""}
   ${home ? `<label class="hsearch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="Search" autocomplete="off" aria-label="Search writeups"></label>` : ""}
   <nav class="links"><div class="dd"><button type="button" class="ddb" aria-haspopup="true">CTF<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -104,7 +104,7 @@ const groups = (list) => {
 const platforms = [...new Set(W.map((w) => w.platform))];
 const home = page({
   title: NAME, home: true, url: "/",
-  description: "Writeups by zero@444: TryHackMe rooms, machines and challenges solved step by step.",
+  description: "Writeups by zero@404: TryHackMe rooms, machines and challenges solved step by step.",
   body: `<main class="wrap wide">
   <section class="intro hero">
     <div class="glow" aria-hidden="true"></div>

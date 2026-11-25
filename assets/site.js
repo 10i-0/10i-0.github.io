@@ -1,4 +1,4 @@
-// zero@444 writeups: small enhancements for the static pages.
+// zero@404 writeups: small enhancements for the static pages.
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
