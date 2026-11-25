@@ -9,7 +9,7 @@ import { createHash } from "node:crypto";
 const V = (f) => createHash("sha1").update(readFileSync(f)).digest("hex").slice(0, 8);
 
 const SITE = "https://10i-0.github.io";
-const NAME = "zero@404";
+const NAME = "zero";
 const GITHUB = "https://github.com/10i-0";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
@@ -59,7 +59,7 @@ function page({ title, description, url, image, crumb = "", body, home = false }
 <meta name="description" content="${attr(description)}">
 <link rel="canonical" href="${SITE}${url}">
 <meta property="og:type" content="${home ? "website" : "article"}">
-<meta property="og:site_name" content="zero@404">
+<meta property="og:site_name" content="zero">
 <meta property="og:title" content="${attr(full)}">
 <meta property="og:description" content="${attr(description)}">
 <meta property="og:url" content="${SITE}${url}">
@@ -76,7 +76,7 @@ function page({ title, description, url, image, crumb = "", body, home = false }
 </head>
 <body>
 <header><div class="in">
-  <a class="me" href="/" aria-label="zero@404 home"><i>┌──(</i><span>zero㉿404</span><i>)</i></a>
+  <a class="me" href="/" aria-label="zero, home"><span class="glitch" data-text="zero">zero</span></a>
   ${crumb ? `<div class="crumb">${crumb}</div>` : ""}
   ${home ? `<label class="hsearch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="Search" autocomplete="off" aria-label="Search writeups"></label>` : ""}
   <nav class="links"><div class="dd"><button type="button" class="ddb" aria-haspopup="true">CTF<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -104,13 +104,12 @@ const groups = (list) => {
 const platforms = [...new Set(W.map((w) => w.platform))];
 const home = page({
   title: NAME, home: true, url: "/",
-  description: "Writeups by zero@404: TryHackMe rooms, machines and challenges solved step by step.",
+  description: "Writeups by zero: TryHackMe rooms, machines and challenges solved step by step.",
   body: `<main class="wrap wide">
   <section class="intro hero">
     <div class="glow" aria-hidden="true"></div>
-    <div class="prompt"><span class="pk">└─</span><span class="pu">$</span> <span class="typed" data-text="cat notes.txt"></span><span class="cur"></span></div>
-    <h1 class="grad">Notes from the terminal</h1>
-    <p>Step-by-step writeups of the rooms and machines I've solved.</p>
+    <h1 class="grad">Every box tells a story.</h1>
+    <p>Here's how I read them.</p>
   </section>
   
   ${groups(W)}
